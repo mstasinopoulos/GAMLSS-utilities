@@ -1,0 +1,51 @@
+# functions
+export(scattersmooth, plotSimpleGamlss,
+        penReg, penRegQ, 
+        pbq, gamlss.pbq, 
+        garmaFit, lagPlot, centiles.ts,
+        scale0to1, unscale0to1)
+
+#importFrom(colorspace)
+importFrom(gamlss, gamlss, .gamlss.bi.list, is.gamlss, predictAll)
+importFrom(gamlss.dist, as.gamlss.family, NO, dNO, qNO, pNO)
+import(zoo)
+import(stats)
+#importFrom(spam)
+#importFrom(genoud)
+
+importFrom(grDevices, gray, heat.colors)
+importFrom(graphics, box, image, legend, lines, par, plot, points, rug, title)
+importFrom(methods, is)
+
+#importFrom(stats, knots, coef, fitted, predict, residuals)
+#importFrom(Matrix, t, solve, as.vector, diag)
+
+#S3method(fitted, locW)
+#S3method(residuals, locW)
+
+S3method(vcov, garma)
+S3method(print, garma)
+S3method(coef, garma)
+S3method(summary, garma)
+S3method(fitted, garma)
+
+
+
+S3method(fitted, penReg)
+S3method(residuals, penReg)
+S3method(coef, penReg)
+S3method(coef, penRegQ)
+S3method(AIC, penReg)
+S3method(deviance, penReg)
+S3method(deviance, penRegQ)
+S3method(plot, penReg)
+S3method(print, penReg)
+S3method(summary, penReg)
+S3method(summary, penRegQ)
+
+#S3method(fitted, penLS)
+#S3method(residuals, penLS)
+#S3method(coef, penLS)
+#S3method(AIC, penLS)
+#S3method(deviance, penLS)
+#S3method(plot, penLS)

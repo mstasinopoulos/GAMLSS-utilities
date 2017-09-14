@@ -1,0 +1,12 @@
+Package: gamlss.util
+Description: Utilities for Generalised Additive Models for Location Scale and Shape and others models.
+Title: Generalised Additive Models for Location Scale and Shape Utilities
+LazyLoad: yes
+Version: 5.0-2
+Date: 2017-06-20
+Depends: R (>= 2.15.0), gamlss.dist, gamlss (>= 4.3.3), zoo, stats, methods, graphics, grDevices
+Suggests: colorspace
+Author: Mikis Stasinopoulos <mikis.stasinopoulos@gamlss.org>, Bob Rigby, Paul Eilers <p.eilers@erasmusmc.nl>
+Maintainer: Mikis Stasinopoulos <mikis.stasinopoulos@gamlss.org>
+License: GPL-2 | GPL-3
+URL: http://www.gamlss.org/
