@@ -30,7 +30,7 @@
 garmaFit <- function(formula = formula(data), 
 		                   order = c(0,0),
 		                 weights = NULL,
-	                      data = sys.parent(),
+		                    data, 
 	                    family = NO(),  ##  declaring the family ##
 		                   alpha = 0.1,
 				           phi.start = NULL,
@@ -132,7 +132,6 @@ createLags <- function(y,lag=1, omit.na=FALSE)
 				        mu <- ifelse(is.na(eta), alpha, fam$mu.linkinv(eta)) 
 				},
 				{ # case 2
-					
 				  	start  <- l.beta + 1
 		  		 	finish <- start+ (order[2]-1)
 			  		 theta <- parm[start:finish]
@@ -141,7 +140,7 @@ createLags <- function(y,lag=1, omit.na=FALSE)
 					    some <- Xb+g2ylag%*%theta
 					    some <- ifelse(is.na(some),0,some) 
 					     eta <- filter(some, -theta, "r", init =rep(0,order[2]))
-					    mu <- ifelse(is.na(eta), alpha, fam$mu.linkinv(eta)) 	
+					      mu <- ifelse(is.na(eta), alpha, fam$mu.linkinv(eta)) 	
 				},
 				{ # case 3
 					#print(parm)
@@ -175,20 +174,21 @@ createLags <- function(y,lag=1, omit.na=FALSE)
 					   }, 
 					   {# two  parameters 
 						 sigma <- parm[finish] 
-						   llh <-  -sum(w*PDF(y, mu=mu, sigma=sigma, log=TRUE), na.rm = TRUE)
+						   llh <-   if (BItrue) -sum(w*PDF(y,  bd=bd, mu=mu, sigma=sigma, log=TRUE), na.rm = TRUE)
+						       else -sum(w*PDF(y, mu=mu, sigma=sigma, log=TRUE), na.rm = TRUE)
 					   },
 					   {# three parameters
 						 sigma <- parm[finish] 
 						    nu <- parm[finish+1]
-						   llh <- -sum(w*PDF(y, mu=mu, sigma=sigma, nu=nu, log=TRUE), na.rm = TRUE)
-						   
+						    llh <-   if (BItrue) -sum(w*PDF(y, bd=bd, mu=mu, sigma=sigma, nu=nu, log=TRUE), na.rm = TRUE)
+						            else -sum(w*PDF(y, mu=mu, sigma=sigma, nu=nu, log=TRUE), na.rm = TRUE)
 					   },
 					   {# four parameters
 						 sigma <- parm[finish] 
 						    nu <- parm[finish+1]
 						   tau <-parm[finish+2]
-						   llh <-  -sum(w*PDF(y, mu=mu, sigma=sigma, nu=nu, tau=tau, log=TRUE),  na.rm = TRUE)
-             
+						   llh <- if (BItrue) -sum(w*PDF(y, bd=bd, mu=mu, sigma=sigma, nu=nu, tau=tau, log=TRUE),  na.rm = TRUE)
+						           else -sum(w*PDF(y, mu=mu, sigma=sigma, nu=nu, tau=tau, log=TRUE),  na.rm = TRUE)
 					   }
 			         )
 		if (save) return(list(lik=llh, mu=mu))
@@ -206,8 +206,9 @@ createLags <- function(y,lag=1, omit.na=FALSE)
 ## starting values for beta
 ## fitting a gamlss model
 ## possibly with weights ????? YES but we need length(y) here 
-     m0 <- gamlss(formula, family=family, data=data, trace=FALSE) #
-     cat("deviance of linear model= ", deviance(m0),"\n")
+m0 <- if (missing(data)) gamlss(formula, family=family,trace=FALSE) 
+      else gamlss(formula, family=family, data=data, trace=FALSE) #
+cat("deviance of linear model= ", deviance(m0),"\n")
      if (case==0) return(m0) # stop if case 0
 # get the initial betas
        beta <- coef(m0)
@@ -221,6 +222,7 @@ createLags <- function(y,lag=1, omit.na=FALSE)
 	      fam <- as.gamlss.family(family)
       nopar <- fam$nopar
           N <- length(y)
+     BItrue <- FALSE 
 ## extracting now the y and the binomial denominator in case we use BI or BB
 if(any(fam$family%in%gamlss::.gamlss.bi.list)) 
 { BItrue <- TRUE
@@ -307,9 +309,9 @@ if(any(fam$family%in%gamlss::.gamlss.bi.list))
     }
 	if ("sigma"%in%names(fam$parameters))
 	{
-		     sigma <- fitted(m0, "sigma")[1] 
+		       sigma <- fitted(m0, "sigma")[1] 
 	  names(sigma) <- ""
-		#sigma.coef <- coef(m0, "sigma")
+	 	#sigma.coef <- coef(m0, "sigma")
 		#  sigma.se <- se.coef[l.beta+1]
 		# This needs fixxing  
 		#lowersigma <-  fam$smgma.linkinv()

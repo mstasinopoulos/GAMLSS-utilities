@@ -9,23 +9,24 @@ plotSimpleGamlss <- function(y,
                              x,       # has to be in the data for prediction
                         model = NULL, # if a fitted model is available 
                       formula = NULL, # if fitted model not available use the gamlss formula
-                         data = NULL, # this is colpulsory 
+                         data = NULL, # this is compulsory 
                        family = NULL, # it need it if no model is given
-                          val = NULL, # controls howfar the horisontal plots should go
-                            N = 1000, # how many poits to evaluate for the distribution curves 
+                          val = NULL, # controls how far the horizontal plots should go
+                            N = 1000, # how many points to evaluate for the distribution curves 
                         x.val = quantile(x), # which values of x
                          ylim = c(min(y), max(y)),
                          xlim = c(min(x), max(x)), 
-#                         ylab = paste(deparse(substitute(y))),
-#                         xlab = paste(deparse(substitute(x))),
+                         ylab = NULL,
+                         xlab = NULL,
                              ...)
 {
      args <- list(...)
   if (is.null(data)) stop("the data argument is required")  
   ## has to change
   ## if (!is.null(data)) {attach(data); on.exit(detach(data))}
-  ylab <- deparse(substitute(y))
-  xlab <- deparse(substitute(x))
+ylab <- if (is.null(ylab)) deparse(substitute(y)) else ylab
+xlab <- if (is.null(xlab)) deparse(substitute(x)) else xlab
+x.lab <- deparse(substitute(x))
   y <- if (!is.null(data)) get(deparse(substitute(y)), envir=as.environment(data)) else y
   x <- if (!is.null(data)) get(deparse(substitute(x)), envir=as.environment(data)) else x
   if (!is.null(model))
@@ -57,8 +58,8 @@ plotSimpleGamlss <- function(y,
 if (!is.null(model))
 {
   lines(fitted(model)[order(x)]~x[order(x)],  type="l", col="black") 
-  NewData <- eval(parse(text=paste(paste("data.frame(", paste(xlab,"=x.val", sep="")),")")))
-        p <- predictAll(model, , newdata=NewData,  type="response", data=data)
+  NewData <- eval(parse(text=paste(paste("data.frame(", paste(x.lab,"=x.val", sep="")),")")))
+        p <- predictAll(model, newdata=NewData,  type="response", data=data)
 }
 else
 {
@@ -66,8 +67,8 @@ else
      m1 <- gamlss(formula=form, data=data, trace=FALSE, family=family, ...)
     if (!is.null(data) ) m1$call$data <- substitute(data)
      lines(fitted(m1)[order(x)]~x[order(x)],  type="l", col="black")
-  NewData <- eval(parse(text=paste(paste("data.frame(", paste(xlab,"=x.val", sep="")),")")))
-        p <- predictAll(m1, , newdata=NewData,  type="response", data=data)
+  NewData <- eval(parse(text=paste(paste("data.frame(", paste(x.lab,"=x.val", sep="")),")")))
+        p <- predictAll(m1, newdata=NewData,  type="response", data=data)
 }  
 
  

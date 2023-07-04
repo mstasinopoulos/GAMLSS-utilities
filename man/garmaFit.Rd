@@ -8,7 +8,7 @@ This function is for fitting a GARMA model, see  Benjamin et al. (2003).
 }
 \usage{
 garmaFit(formula = formula(data), order = c(0, 0), 
-         weights = NULL, data = sys.parent(), 
+         weights = NULL, data, 
          family = NO(), alpha = 0.1, 
          phi.start = NULL, theta.start = NULL, 
          tail = max(order), control = list())

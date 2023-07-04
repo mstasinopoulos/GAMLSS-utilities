@@ -8,7 +8,8 @@ This is to plot a simple GAMLSS model where only one explanatory variable exist 
 \usage{
 plotSimpleGamlss(y, x, model = NULL, formula = NULL, data = NULL, 
          family = NULL, val = NULL, N = 1000, x.val = quantile(x), 
-         ylim = c(min(y), max(y)), xlim = c(min(x), max(x)), ...)
+         ylim = c(min(y), max(y)), xlim = c(min(x), max(x)),  
+         ylab = NULL, xlab = NULL,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -44,6 +45,13 @@ the y limits in the plot
   \item{xlim}{
 the x limits in the plot
 }
+  \item{ylab}{
+the y labels in the plot
+}
+  \item{xlab}{
+the x labels in the plot
+}
+
   \item{\dots}{
 extra argument to be passed to \code{gamlss()} function if \code{model=NULL}
 }

@@ -57,7 +57,6 @@ lag.plot2<-function (series1, series2, lags = 0, corr = TRUE, smooth = TRUE)
     }
 }
   
-  
 if (is.null(x))
    {lags <- if (lags==0) 1  else lags
    lag.plot1(series=y, lags=lags,  corr = corr, smooth = corr)
